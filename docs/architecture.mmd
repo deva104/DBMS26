@@ -1,0 +1,27 @@
+%% Architecture - Library Management System with RFID
+%% Render: npx -p @mermaid-js/mermaid-cli mmdc -i docs/architecture.mmd -o docs/architecture.png
+flowchart LR
+    tags["NTAG213 RFID tags<br/>member cards + book copies"]
+    typed["Typed UID<br/>(until tags arrive)"]
+    phone["Android phone - Chrome<br/>Web NFC NDEFReader<br/>scan.html<br/>UID = event.serialNumber"]
+    dash["Librarian PC browser<br/>dashboard.html, members,<br/>books, reports"]
+
+    subgraph render["Render free web service - Node.js + Express (HTTPS)"]
+        direction TB
+        scan["Scan handler<br/>POST /api/scan<br/>1. insert scan_logs row"]
+        circ["Circulation logic<br/>member check / 60 s window<br/>ISSUE + RETURN transactions<br/>fine Rs 2 per late day"]
+        crud["CRUD + reports<br/>/api/members /api/books<br/>/api/copies /api/categories<br/>/api/reports/:name"]
+        act["/api/activity?since=<br/>/api/issues /api/fines"]
+        scan --> circ
+    end
+
+    db[("Aiven MySQL 8<br/>7 tables, SSL<br/>mysql2 pool")]
+
+    tags -- "tap on phone" --> phone
+    typed --> phone
+    phone -- "HTTPS JSON {uid, device_id}" --> scan
+    dash -- "forms: GET / POST / PUT / DELETE" --> crud
+    dash -- "polls every 2 s" --> act
+    circ -- "SQL (prepared statements)" --> db
+    crud -- "SQL" --> db
+    act -- "SQL" --> db

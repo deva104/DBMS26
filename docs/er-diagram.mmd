@@ -1,0 +1,70 @@
+%% ER diagram - Library Management System with RFID
+%% Render: npx -p @mermaid-js/mermaid-cli mmdc -i docs/er-diagram.mmd -o docs/er-diagram.png
+erDiagram
+    CATEGORIES ||--o{ BOOKS : "classifies"
+    BOOKS ||--o{ BOOK_COPIES : "has physical"
+    BOOK_COPIES ||--o{ ISSUES : "is lent in"
+    MEMBERS ||--o{ ISSUES : "borrows in"
+    ISSUES ||--o| FINES : "late return creates"
+    MEMBERS |o..o{ SCAN_LOGS : "card scanned (uid, no FK)"
+    BOOK_COPIES |o..o{ SCAN_LOGS : "tag scanned (uid, no FK)"
+
+    CATEGORIES {
+        int category_id PK
+        varchar name UK "NOT NULL"
+    }
+    BOOKS {
+        int book_id PK
+        varchar isbn UK
+        varchar title "NOT NULL"
+        varchar author "NOT NULL"
+        varchar publisher
+        smallint pub_year "CHECK 1900-2100"
+        int category_id FK "RESTRICT"
+    }
+    BOOK_COPIES {
+        int copy_id PK
+        int book_id FK "RESTRICT"
+        varchar rfid_tag UK "NTAG UID e.g. 04:BB:00:01"
+        varchar shelf_location
+        enum status "available | issued | lost"
+        date added_on
+    }
+    MEMBERS {
+        int member_id PK
+        varchar prn UK
+        varchar name "NOT NULL"
+        varchar email UK
+        varchar phone "CHECK 10 digits"
+        varchar department "CHECK ENTC CS IT Mech Civil"
+        enum member_type "student | faculty"
+        varchar rfid_uid UK "card UID, NULL = no card"
+        tinyint max_books "student 3, faculty 5"
+        enum status "active | blocked"
+        date joined_on
+    }
+    ISSUES {
+        int issue_id PK
+        int copy_id FK "RESTRICT"
+        int member_id FK "RESTRICT"
+        datetime issue_date
+        date due_date "issue + 14 days"
+        datetime return_date "NULL = still out"
+        int open_copy_id UK "generated: one open loan per copy"
+    }
+    FINES {
+        int fine_id PK
+        int issue_id FK,UK "RESTRICT, 1 fine per issue"
+        decimal amount "Rs 2 x days late"
+        enum status "unpaid | paid"
+        datetime paid_on "NULL until paid"
+    }
+    SCAN_LOGS {
+        int log_id PK
+        varchar uid "any scanned UID"
+        varchar device_id "which phone or desk"
+        enum scan_type "member | book | unknown"
+        varchar action "member_ready issue return info ..."
+        varchar message
+        datetime scanned_at "DEFAULT CURRENT_TIMESTAMP"
+    }

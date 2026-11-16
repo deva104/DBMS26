@@ -1,5 +1,5 @@
 EXPLAIN output BEFORE creating db/indexes.sql
-Generated: 17/11/2026, 12:26:37 am IST
+Generated: 17/11/2026, 12:44:10 am IST
 
 ==============================================================================
 A. Books member 1 currently holds (borrow-limit check, runs on every issue)

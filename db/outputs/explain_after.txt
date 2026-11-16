@@ -1,5 +1,5 @@
 EXPLAIN output AFTER creating db/indexes.sql
-Generated: 17/11/2026, 12:26:38 am IST
+Generated: 17/11/2026, 12:44:11 am IST
 
 ==============================================================================
 A. Books member 1 currently holds (borrow-limit check, runs on every issue)
@@ -62,7 +62,7 @@ SELECT log_id, uid, action FROM scan_logs WHERE device_id = 'desk-pc-01' AND sca
 Plan (FORMAT=TREE):
 -> Limit: 1 row(s)  (cost=0.71 rows=0.333)
     -> Filter: (scan_logs.scan_type = 'member')  (cost=0.71 rows=0.333)
-        -> Index range scan on scan_logs using idx_scan_device_time over (device_id = 'desk-pc-01' AND '2026-11-17 00:25:37' <= scanned_at) (reverse), with index condition: ((scan_logs.device_id = 'desk-pc-01') and (scan_logs.scanned_at >= <cache>((now() - interval 60 second))))  (cost=0.71 rows=1)
+        -> Index range scan on scan_logs using idx_scan_device_time over (device_id = 'desk-pc-01' AND '2026-11-17 00:43:09' <= scanned_at) (reverse), with index condition: ((scan_logs.device_id = 'desk-pc-01') and (scan_logs.scanned_at >= <cache>((now() - interval 60 second))))  (cost=0.71 rows=1)
 
 
 ==============================================================================
