@@ -1,0 +1,3 @@
+# keep LF line endings in the repo and working copy (Render runs on Linux)
+* text=auto eol=lf
+*.png binary

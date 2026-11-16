@@ -1,0 +1,25 @@
+{
+  "name": "lms-rfid",
+  "version": "1.0.0",
+  "description": "Library Management System with RFID - DBMS mini project (Node + Express + MySQL)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "db:test": "node scripts/test-connection.js",
+    "db:setup": "node scripts/run-sql.js db/schema.sql db/seed.sql",
+    "db:indexes": "node scripts/run-indexes.js",
+    "db:queries": "node scripts/run-queries.js",
+    "test:scan": "node scripts/test-scan.js",
+    "test:crud": "node scripts/test-crud.js"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "mysql2": "^3.24.6"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
+}
