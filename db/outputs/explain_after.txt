@@ -1,0 +1,96 @@
+EXPLAIN output AFTER creating db/indexes.sql
+Generated: 17/11/2026, 12:26:38 am IST
+
+==============================================================================
+A. Books member 1 currently holds (borrow-limit check, runs on every issue)
+SELECT COUNT(*) AS open_issues FROM issues WHERE member_id = 1 AND return_date IS NULL
+
++----+-------------+--------+------------+------+------------------------------------------------+--------------------------+---------+-------------+------+----------+--------------------------+
+| id | select_type | table  | partitions | type | possible_keys                                  | key                      | key_len | ref         | rows | filtered | Extra                    |
++----+-------------+--------+------------+------+------------------------------------------------+--------------------------+---------+-------------+------+----------+--------------------------+
+| 1  | SIMPLE      | issues | NULL       | ref  | idx_issues_member_return,idx_issues_return_due | idx_issues_member_return | 10      | const,const | 2    | 100      | Using where; Using index |
++----+-------------+--------+------------+------+------------------------------------------------+--------------------------+---------+-------------+------+----------+--------------------------+
+1 row
+
+Plan (FORMAT=TREE):
+-> Aggregate: count(0)  (cost=0.65 rows=1)
+    -> Filter: (issues.return_date is null)  (cost=0.45 rows=2)
+        -> Covering index lookup on issues using idx_issues_member_return (member_id=1, return_date=NULL)  (cost=0.45 rows=2)
+
+
+==============================================================================
+B. Overdue report
+SELECT issue_id, copy_id, member_id, due_date FROM issues WHERE return_date IS NULL AND due_date < CURDATE()
+
++----+-------------+--------+------------+-------+-----------------------+-----------------------+---------+------+------+----------+-----------------------+
+| id | select_type | table  | partitions | type  | possible_keys         | key                   | key_len | ref  | rows | filtered | Extra                 |
++----+-------------+--------+------------+-------+-----------------------+-----------------------+---------+------+------+----------+-----------------------+
+| 1  | SIMPLE      | issues | NULL       | range | idx_issues_return_due | idx_issues_return_due | 9       | NULL | 4    | 100      | Using index condition |
++----+-------------+--------+------------+-------+-----------------------+-----------------------+---------+------+------+----------+-----------------------+
+1 row
+
+Plan (FORMAT=TREE):
+-> Index range scan on issues using idx_issues_return_due over (return_date = NULL AND due_date < '2026-11-17'), with index condition: ((issues.return_date is null) and (issues.due_date < <cache>(curdate())))  (cost=2.06 rows=4)
+
+
+==============================================================================
+C. Books due in the next 3 days (reminders)
+SELECT issue_id, member_id, due_date FROM issues WHERE return_date IS NULL AND due_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 3 DAY
+
++----+-------------+--------+------------+-------+-----------------------+-----------------------+---------+------+------+----------+-----------------------+
+| id | select_type | table  | partitions | type  | possible_keys         | key                   | key_len | ref  | rows | filtered | Extra                 |
++----+-------------+--------+------------+-------+-----------------------+-----------------------+---------+------+------+----------+-----------------------+
+| 1  | SIMPLE      | issues | NULL       | range | idx_issues_return_due | idx_issues_return_due | 9       | NULL | 1    | 100      | Using index condition |
++----+-------------+--------+------------+-------+-----------------------+-----------------------+---------+------+------+----------+-----------------------+
+1 row
+
+Plan (FORMAT=TREE):
+-> Index range scan on issues using idx_issues_return_due over (return_date = NULL AND '2026-11-17' <= due_date <= '2026-11-20'), with index condition: ((issues.return_date is null) and (issues.due_date between <cache>(curdate()) and <cache>((curdate() + interval 3 day))))  (cost=0.71 rows=1)
+
+
+==============================================================================
+D. 60-second issue window (runs on every book scan)
+SELECT log_id, uid, action FROM scan_logs WHERE device_id = 'desk-pc-01' AND scan_type = 'member' AND scanned_at >= NOW() - INTERVAL 60 SECOND ORDER BY scanned_at DESC LIMIT 1
+
++----+-------------+-----------+------------+-------+----------------------+----------------------+---------+------+------+----------+---------------------------------------------------------+
+| id | select_type | table     | partitions | type  | possible_keys        | key                  | key_len | ref  | rows | filtered | Extra                                                   |
++----+-------------+-----------+------------+-------+----------------------+----------------------+---------+------+------+----------+---------------------------------------------------------+
+| 1  | SIMPLE      | scan_logs | NULL       | range | idx_scan_device_time | idx_scan_device_time | 167     | NULL | 1    | 33.33    | Using index condition; Using where; Backward index scan |
++----+-------------+-----------+------------+-------+----------------------+----------------------+---------+------+------+----------+---------------------------------------------------------+
+1 row
+
+Plan (FORMAT=TREE):
+-> Limit: 1 row(s)  (cost=0.71 rows=0.333)
+    -> Filter: (scan_logs.scan_type = 'member')  (cost=0.71 rows=0.333)
+        -> Index range scan on scan_logs using idx_scan_device_time over (device_id = 'desk-pc-01' AND '2026-11-17 00:25:37' <= scanned_at) (reverse), with index condition: ((scan_logs.device_id = 'desk-pc-01') and (scan_logs.scanned_at >= <cache>((now() - interval 60 second))))  (cost=0.71 rows=1)
+
+
+==============================================================================
+E. Member card lookup by RFID (UNIQUE rfid_uid already indexed)
+SELECT member_id, name FROM members WHERE rfid_uid = '04:AA:00:01'
+
++----+-------------+---------+------------+-------+---------------+----------+---------+-------+------+----------+-------+
+| id | select_type | table   | partitions | type  | possible_keys | key      | key_len | ref   | rows | filtered | Extra |
++----+-------------+---------+------------+-------+---------------+----------+---------+-------+------+----------+-------+
+| 1  | SIMPLE      | members | NULL       | const | rfid_uid      | rfid_uid | 131     | const | 1    | 100      | NULL  |
++----+-------------+---------+------------+-------+---------------+----------+---------+-------+------+----------+-------+
+1 row
+
+Plan (FORMAT=TREE):
+-> Rows fetched before execution  (cost=0..0 rows=1)
+
+
+==============================================================================
+F. Book copy lookup by RFID (UNIQUE rfid_tag already indexed)
+SELECT copy_id, status FROM book_copies WHERE rfid_tag = '04:BB:00:01'
+
++----+-------------+-------------+------------+-------+---------------+----------+---------+-------+------+----------+-------+
+| id | select_type | table       | partitions | type  | possible_keys | key      | key_len | ref   | rows | filtered | Extra |
++----+-------------+-------------+------------+-------+---------------+----------+---------+-------+------+----------+-------+
+| 1  | SIMPLE      | book_copies | NULL       | const | rfid_tag      | rfid_tag | 130     | const | 1    | 100      | NULL  |
++----+-------------+-------------+------------+-------+---------------+----------+---------+-------+------+----------+-------+
+1 row
+
+Plan (FORMAT=TREE):
+-> Rows fetched before execution  (cost=0..0 rows=1)
+
