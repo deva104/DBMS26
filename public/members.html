@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Members - Library RFID</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="nav">
+  <b>Library RFID</b>
+  <a href="scan.html">Scan</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="members.html" class="here">Members</a>
+  <a href="books.html">Books</a>
+  <a href="reports.html">Reports</a>
+</div>
+
+<main>
+  <h2>Members</h2>
+
+  <form id="memberForm" class="box">
+    <b id="formTitle">Add member</b><br>
+    <input type="hidden" name="member_id">
+    <label>PRN <input name="prn" size="12" required></label>
+    <label>Name <input name="name" size="20" required></label>
+    <label>Email <input name="email" type="email" size="26" required></label>
+    <label>Phone <input name="phone" size="10" placeholder="10 digits"></label>
+    <label>Dept
+      <select name="department">
+        <option>CS</option><option>IT</option><option>ENTC</option><option>Mech</option><option>Civil</option>
+      </select>
+    </label>
+    <label>Type
+      <select name="member_type"><option>student</option><option>faculty</option></select>
+    </label>
+    <label>Card UID <input name="rfid_uid" size="14" placeholder="04:AA:00:01"></label>
+    <label>Max books <input name="max_books" size="3" placeholder="auto"></label>
+    <label>Status
+      <select name="status"><option>active</option><option>blocked</option></select>
+    </label>
+    <br>
+    <button type="submit">Save</button>
+    <button type="button" id="clearBtn">Clear</button>
+    <span id="formMsg"></span>
+  </form>
+
+  <p>
+    Search: <input id="search" placeholder="name, PRN or dept" size="20">
+    <span id="listMsg"></span>
+  </p>
+  <div id="list"></div>
+
+  <div id="detail"></div>
+
+  <h3>Unpaid fines</h3>
+  <div id="fines"></div>
+</main>
+
+<script src="js/common.js"></script>
+<script src="js/members.js"></script>
+</body>
+</html>

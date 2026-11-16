@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard - Library RFID</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="nav">
+  <b>Library RFID</b>
+  <a href="scan.html">Scan</a>
+  <a href="dashboard.html" class="here">Dashboard</a>
+  <a href="members.html">Members</a>
+  <a href="books.html">Books</a>
+  <a href="reports.html">Reports</a>
+</div>
+
+<main>
+  <h2>Librarian dashboard</h2>
+  <p class="small">Updates every 2 seconds. <span id="status"></span></p>
+
+  <table class="counts">
+    <tr>
+      <td><b id="c_members">-</b>members</td>
+      <td><b id="c_books">-</b>books (titles)</td>
+      <td><b id="c_out">-</b>copies out</td>
+      <td><b id="c_overdue">-</b>overdue</td>
+      <td><b id="c_fines">-</b>unpaid fines</td>
+    </tr>
+  </table>
+
+  <h3>Recent scans</h3>
+  <div id="logs"></div>
+
+  <h3>Overdue books</h3>
+  <div id="overdue"></div>
+
+  <h3>Currently issued</h3>
+  <div id="issued"></div>
+</main>
+
+<script src="js/common.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

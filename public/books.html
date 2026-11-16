@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Books - Library RFID</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="nav">
+  <b>Library RFID</b>
+  <a href="scan.html">Scan</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="members.html">Members</a>
+  <a href="books.html" class="here">Books</a>
+  <a href="reports.html">Reports</a>
+</div>
+
+<main>
+  <h2>Books</h2>
+
+  <form id="bookForm" class="box">
+    <b id="bookFormTitle">Add book</b><br>
+    <input type="hidden" name="book_id">
+    <label>ISBN <input name="isbn" size="18" required></label>
+    <label>Title <input name="title" size="30" required></label>
+    <label>Author <input name="author" size="24" required></label>
+    <label>Publisher <input name="publisher" size="18"></label>
+    <label>Year <input name="pub_year" size="5"></label>
+    <label>Category <select name="category_id" id="catSelect"></select></label>
+    <br>
+    <button type="submit">Save</button>
+    <button type="button" id="bookClear">Clear</button>
+    <span id="bookMsg"></span>
+  </form>
+
+  <p>
+    Search: <input id="search" placeholder="title, author or ISBN" size="22">
+    <span id="listMsg"></span>
+  </p>
+  <div id="books"></div>
+
+  <!-- copies of one book, shown after clicking "Copies" -->
+  <div id="copiesSection" style="display:none">
+    <h3 id="copiesTitle">Copies</h3>
+    <div id="copies"></div>
+    <form id="copyForm" class="box">
+      <b id="copyFormTitle">Add copy</b><br>
+      <input type="hidden" name="copy_id">
+      <label>RFID tag <input name="rfid_tag" size="16" placeholder="04:BB:00:26" required></label>
+      <label>Shelf <input name="shelf_location" size="8"></label>
+      <label>Status
+        <select name="status"><option>available</option><option>lost</option><option>issued</option></select>
+      </label>
+      <button type="submit">Save copy</button>
+      <button type="button" id="copyClear">Clear</button>
+      <span id="copyMsg"></span>
+    </form>
+  </div>
+
+  <h3>Categories</h3>
+  <div id="cats"></div>
+  <form id="catForm" class="box">
+    New category: <input name="name" size="24" required>
+    <button type="submit">Add</button>
+    <span id="catMsg"></span>
+  </form>
+</main>
+
+<script src="js/common.js"></script>
+<script src="js/books.js"></script>
+</body>
+</html>

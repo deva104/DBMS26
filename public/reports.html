@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reports - Library RFID</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="nav">
+  <b>Library RFID</b>
+  <a href="scan.html">Scan</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="members.html">Members</a>
+  <a href="books.html">Books</a>
+  <a href="reports.html" class="here">Reports</a>
+</div>
+
+<main>
+  <h2>Reports</h2>
+  <form id="reportForm" class="box">
+    Report: <select id="reportSelect"></select>
+    <span id="memberBox" style="display:none">
+      Member: <select id="memberSelect"></select>
+    </span>
+    <button type="submit">Run</button>
+    <span id="msg"></span>
+  </form>
+
+  <p id="notes" class="small"></p>
+  <div id="result"></div>
+
+  <details>
+    <summary>Show SQL</summary>
+    <pre id="sql" class="box"></pre>
+  </details>
+</main>
+
+<script src="js/common.js"></script>
+<script src="js/reports.js"></script>
+</body>
+</html>

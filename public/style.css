@@ -1,0 +1,48 @@
+/* style.css - one plain stylesheet for all pages */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  color: #222;
+  background: #f6f6f6;
+}
+
+.nav {
+  background: #e6eef8;
+  border-bottom: 1px solid #c5d2e3;
+  padding: 8px 12px;
+}
+.nav b { margin-right: 14px; }
+.nav a { margin-right: 12px; color: #1d4f91; text-decoration: none; }
+.nav a.here { font-weight: bold; text-decoration: underline; }
+
+main { max-width: 1050px; margin: 0 auto; padding: 8px 12px 30px; }
+h2 { font-size: 20px; margin: 12px 0 8px; }
+h3 { font-size: 16px; margin: 18px 0 6px; }
+p { margin: 6px 0; }
+
+table { border-collapse: collapse; width: 100%; background: #fff; font-size: 14px; }
+th, td { border: 1px solid #ccc; padding: 4px 6px; text-align: left; vertical-align: top; }
+th { background: #ececec; }
+td.act { white-space: nowrap; } /* keep Edit / Delete buttons on one line */
+td.act button { font-size: 13px; padding: 2px 6px; }
+.wrap { overflow-x: auto; } /* wide tables scroll sideways on a phone */
+
+input, select, button { font: inherit; padding: 4px 6px; }
+button { cursor: pointer; }
+.box { background: #fff; border: 1px solid #ccc; padding: 8px 10px; margin: 6px 0; }
+.box label { display: inline-block; margin: 0 12px 8px 0; }
+
+/* big scan result box */
+.msg { border: 2px solid; padding: 14px; font-size: 19px; margin: 10px 0; }
+.green { background: #e4f5e4; border-color: #5ba35b; }
+.red { background: #fbe5e5; border-color: #c55; }
+.grey { background: #eee; border-color: #aaa; }
+
+.small { font-size: 13px; color: #555; }
+.err { color: #b00000; }
+.ok { color: #1d6b1d; }
+.late { color: #b00000; font-weight: bold; }
+
+.counts td { text-align: center; font-size: 13px; }
+.counts td b { display: block; font-size: 22px; }

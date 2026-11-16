@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scan desk - Library RFID</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="nav">
+  <b>Library RFID</b>
+  <a href="scan.html" class="here">Scan</a>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="members.html">Members</a>
+  <a href="books.html">Books</a>
+  <a href="reports.html">Reports</a>
+</div>
+
+<main>
+  <h2>Scan desk</h2>
+  <p class="small">
+    To issue: scan the member card, then the book within 60 seconds.
+    To return: scan the book. A book scanned on its own shows its details.
+  </p>
+
+  <p>
+    <button id="nfcBtn">Start NFC scan</button>
+    <span id="nfcStatus" class="small"></span>
+  </p>
+
+  <form id="typeForm" class="box">
+    Type UID:
+    <input id="uidInput" list="uidList" placeholder="04:AA:00:01" autocomplete="off" size="16">
+    <button type="submit">Submit</button>
+    <datalist id="uidList"></datalist>
+  </form>
+
+  <div id="result" class="msg grey">Waiting for a scan...</div>
+
+  <h3>Last 5 scans</h3>
+  <div id="history"><p class="small">No scans yet.</p></div>
+
+  <p class="small">
+    This device id: <span id="deviceId"></span><br>
+    Sample UIDs: members 04:AA:00:01 to 04:AA:00:18 (09 is blocked, 08 and 11 have unpaid fines),
+    book copies 04:BB:00:01 to 04:BB:00:25.
+  </p>
+</main>
+
+<script src="js/common.js"></script>
+<script src="js/scan.js"></script>
+</body>
+</html>
