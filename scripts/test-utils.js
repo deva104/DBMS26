@@ -5,7 +5,15 @@ let baseUrl = '';
 let server = null;
 const results = { pass: 0, fail: 0 };
 
+// Normally the app is started here on a free port. Set TEST_URL to test a
+// deployed copy instead, e.g. TEST_URL=https://lms-rfid.onrender.com npm run test:scan
+// (it must use the same database as your .env, because tests prepare rows directly).
 async function startServer() {
+  if (process.env.TEST_URL) {
+    baseUrl = process.env.TEST_URL.replace(/\/$/, '');
+    console.log('Testing deployed app at ' + baseUrl);
+    return baseUrl;
+  }
   await new Promise((resolve) => {
     server = app.listen(0, '127.0.0.1', resolve); // port 0 = any free port
   });

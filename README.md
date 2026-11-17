@@ -53,6 +53,7 @@ Needs Node.js 20+ and an Aiven MySQL service (free plan).
 | `npm start` | starts the website on http://localhost:3000 |
 | `npm run test:scan` | end-to-end RFID flow test against the real DB (25 checks) |
 | `npm run test:crud` | smoke test of every API route (65 checks) |
+| `TEST_URL=https://lms-rfid.onrender.com npm run test:scan` | run a test suite against the deployed app instead (same DB) |
 
 The two test scripts create their own `TEST` rows and delete them at the end.
 
